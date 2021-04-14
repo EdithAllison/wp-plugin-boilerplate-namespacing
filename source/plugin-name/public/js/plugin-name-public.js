@@ -15,12 +15,6 @@
 	 *
 	 * });
 	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
 	 * ...and/or other possibilities.
 	 *
 	 * Ideally, it is not considered best practise to attach more than a
