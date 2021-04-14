@@ -600,6 +600,8 @@ function <?php echo $input['lower']; ?>_uninstall_plugin() {
 namespace <?php echo $input['plugin_namespace']; ?>\Inc;
 use <?php echo $input['plugin_namespace']; ?>\Load;
 use <?php echo $input['plugin_namespace']; ?>\i18n;
+use <?php echo $input['plugin_namespace']; ?>\Admin;
+use <?php echo $input['plugin_namespace']; ?>\Public;
 
 class Plugin_Name {
 
