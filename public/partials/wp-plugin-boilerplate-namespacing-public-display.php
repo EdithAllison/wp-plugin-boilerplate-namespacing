@@ -17,7 +17,8 @@
     $input = array(
         'plugin_name' => !empty($_POST['plugin_name']) ? sanitize_text_field($_POST['plugin_name']) : 'Plugin Name',
         'plugin_slug' =>  !empty($_POST['plugin_slug']) ? sanitize_text_field($_POST['plugin_slug']) : 'plugin-name',
-        'plugin_url' =>  !empty($_POST['plugin_url']) ? esc_url($_POST['plugin_url']) : ' http://example.com/plugin-name-uri/',
+        'plugin_url' =>  !empty($_POST['plugin_url']) ? esc_url($_POST['plugin_url']) : 'http://example.com/plugin-name-uri/',
+        'plugin_namespace' =>  !empty($_POST['plugin_namespace']) ? sanitize_text_field($_POST['plugin_namespace']) : 'PluginNamespace',
         'author_name' => !empty($_POST['author_name']) ? sanitize_text_field($_POST['author_name']) : 'Your Name',
         'author_email' => !empty($_POST['author_email']) ? sanitize_email($_POST['author_email']) : 'email@example.com',
         'author_url' => !empty($_POST['author_url']) ? esc_url($_POST['author_url']) : 'http://example.com/',
@@ -36,31 +37,43 @@
     <div>
     <label for="plugin_name"> <?php _e('Plugin Name', 'agenturallison'); ?> </label>
     <input name="plugin_name" />
+    <p> <?php _e('The plugin name', 'agenturallison'); ?>  </p>
     </div>
     
     <div>
     <label for="plugin_slug"> <?php _e('Plugin Slug', 'agenturallison'); ?> </label>
     <input name="plugin_slug" />
+    <p> <?php _e('The plugin slug. All lower case. Use hyphens between words. No spaces. Eg "plugin-slug".', 'agenturallison'); ?>  </p>
     </div>
     
     <div>
     <label for="plugin_url"> <?php _e('Plugin URL', 'agenturallison'); ?> </label>
     <input name="plugin_url" />
+    <p> <?php _e('The full plugin URL eg https://example.com/plugin-name-uri/.', 'agenturallison'); ?>  </p>
     </div>
+    
+<div>
+    <label for="plugin_url"> <?php _e('Plugin Namespace', 'agenturallison'); ?> </label>
+    <input name="plugin_namespace" />
+    <p> <?php _e('The namespace used by your plugin. For help see <a href="https://www.php.net/manual/en/language.namespaces.php">PHP Manual: Namespaces</a>. Suggested format is YourName\Plugin. Use backward slashes. No trailing slash.', 'agenturallison'); ?>  </p>
+    </div>    
     
     <div>
     <label for="author_name"> <?php _e('Author Name', 'agenturallison'); ?> </label>
     <input name="author_name" />
+    <p> <?php _e('The author or company name.', 'agenturallison'); ?>  </p>
     </div>
     
     <div>
     <label for="author_email"> <?php _e('Author Email', 'agenturallison'); ?> </label>
     <input name="author_email" /> 
+    <p> <?php _e('The author or company email.', 'agenturallison'); ?>  </p>
     </div>
     
     <div>
     <label for="author_url"> <?php _e('Author URL', 'agenturallison'); ?> </label>
     <input name="author_url" /> 
+    <p> <?php _e('The full author URL eg https://example.com/.', 'agenturallison'); ?>  </p>
     </div>
     
     <div>

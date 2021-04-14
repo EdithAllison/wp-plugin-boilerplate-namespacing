@@ -386,6 +386,12 @@ class Wp_Plugin_Boilerplate_Namespacing_Public {
  * Text Domain:       <?php echo $input['lower'] . "\n"; ?>
  * Domain Path:       /languages
  */
+ 
+ namespace <?php echo $input['plugin_namespace']; ?>;
+ use <?php echo $input['plugin_namespace']; ?>\Inc;
+ use <?php echo $input['plugin_namespace']; ?>\Activate;
+ use <?php echo $input['plugin_namespace']; ?>\Deactivate;
+ 
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -405,7 +411,7 @@ define( '<?php echo $input['upper']; ?>_VERSION', '1.0.0' );
  */
 function activate_<?php echo $input['lower']; ?>( $network_wide ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-activator.php';
-	<?php echo $input['package']; ?>_Activator::activate( $network_wide );
+	\<?php echo $input['plugin_namespace']; ?>\Activate\<?php echo $input['package']; ?>_Activator::activate( $network_wide );
 }
 
 /**
@@ -414,11 +420,11 @@ function activate_<?php echo $input['lower']; ?>( $network_wide ) {
  */
 function deactivate_<?php echo $input['lower']; ?>( $network_wide ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php';
-	<?php echo $input['package']; ?>_Deactivator::deactivate( $network_wide );
+	\<?php echo $input['plugin_namespace']; ?>\Deactivate\<?php echo $input['package']; ?>_Deactivator::deactivate( $network_wide );
 }
 
-register_activation_hook( __FILE__, 'activate_<?php echo $input['lower']; ?>' );
-register_deactivation_hook( __FILE__, 'deactivate_<?php echo $input['lower']; ?>' );
+register_activation_hook( __FILE__,  __NAMESPACE__ . '\activate_<?php echo $input['lower']; ?>' );
+register_deactivation_hook( __FILE__,  __NAMESPACE__ . '\deactivate_<?php echo $input['lower']; ?>' );
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -437,14 +443,14 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_
  */
 function run_<?php echo $input['lower']; ?>() {
 
-	$plugin = new <?php echo $input['package']; ?>();
+	$plugin = new \<?php echo $input['plugin_namespace']; ?>\Inc\<?php echo $input['package']; ?>();
 	$plugin->run();
 	
 	// if we have a new blog on a multisite let's set it up
-	add_action( 'wp_insert_site', '<?php echo $input['lower']; ?>_run_multisite_new_site');        
+	add_action( 'wp_insert_site',  __NAMESPACE__ .  '\<?php echo $input['lower']; ?>_run_multisite_new_site');        
 		 
 	//if a blog is removed, let's remove the settings 
-   add_action( 'wp_uninitialize_site', '<?php echo $input['lower']; ?>_run_multisite_delete');
+   add_action( 'wp_uninitialize_site',  __NAMESPACE__ .  '\<?php echo $input['lower']; ?>_run_multisite_delete');
 
 }
 run_<?php echo $input['lower']; ?>();
@@ -456,7 +462,7 @@ run_<?php echo $input['lower']; ?>();
  */
 function <?php echo $input['lower']; ?>_run_multisite_new_site($params) {
   require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-activator.php';    
-  <?php echo $input['package']; ?>_Activator::add_blog($params); 
+  \<?php echo $input['plugin_namespace']; ?>\Activate\<?php echo $input['package']; ?>_Activator::add_blog($params); 
 }
 
 /**
@@ -466,11 +472,8 @@ function <?php echo $input['lower']; ?>_run_multisite_new_site($params) {
  */ 
 function <?php echo $input['lower']; ?>_run_multisite_delete($params) {
   require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php';
-  <?php echo $input['package']; ?>_Deactivator::remove_blog($params);        
+  \<?php echo $input['plugin_namespace']; ?>\Deactivate\<?php echo $input['package']; ?>_Deactivator::remove_blog($params);        
 }
-
-
-
 
 				<?php $text = '<?php' . "\n" . ob_get_clean(); 
 				
@@ -562,7 +565,7 @@ function <?php echo $input['lower']; ?>_uninstall_plugin() {
 				
 				break; 
 				
-				case 'includes/class-plugin-name.php': // CLASS-PLUGIN-NAME.PHP
+				case 'includes/class-plugin-name.php': // INCLUDES/CLASS-PLUGIN-NAME.PHP
 				
 				ob_start();		?>
 
@@ -593,6 +596,11 @@ function <?php echo $input['lower']; ?>_uninstall_plugin() {
  * @subpackage <?php echo $input['package']; ?>/includes
  * @author     <?php echo $input['author_name']; ?> <<?php echo $input['author_email']; ?>>
  */
+ 
+namespace <?php echo $input['plugin_namespace']; ?>\Inc;
+use <?php echo $input['plugin_namespace']; ?>\Load;
+use <?php echo $input['plugin_namespace']; ?>\i18n;
+
 class Plugin_Name {
 
 	/**
@@ -688,7 +696,7 @@ class Plugin_Name {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-<?php echo $input['plugin_slug']; ?>-public.php';
 
-		$this->loader = new <?php echo $input['package']; ?>_Loader();
+		$this->loader = new \<?php echo $input['plugin_namespace']; ?>\Load\<?php echo $input['package']; ?>_Loader();
 
 	}
 
@@ -703,7 +711,7 @@ class Plugin_Name {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new <?php echo $input['package']; ?>_i18n();
+		$plugin_i18n = new \<?php echo $input['plugin_namespace']; ?>\i18n\<?php echo $input['package']; ?>_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -718,7 +726,7 @@ class Plugin_Name {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new <?php echo $input['package']; ?>_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new \<?php echo $input['plugin_namespace']; ?>\Admin\<?php echo $input['package']; ?>_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -734,7 +742,7 @@ class Plugin_Name {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new <?php echo $input['package']; ?>_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new \<?php echo $input['plugin_namespace']; ?>\Public\<?php echo $input['package']; ?>_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
@@ -815,6 +823,9 @@ class Plugin_Name {
  * @subpackage <?php echo $input['package']; ?>/includes
  * @author     <?php echo $input['author_name']; ?> <<?php echo $input['author_email']; ?>>
  */
+ 
+namespace <?php echo $input['plugin_namespace']; ?>\i18n;
+
 class <?php echo $input['package']; ?>_i18n {
 
 
@@ -826,7 +837,7 @@ class <?php echo $input['package']; ?>_i18n {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'<?php echo $input['lower']; ?>',
+			'<?php echo $input['plugin-slug']; ?>',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);
@@ -861,6 +872,9 @@ class <?php echo $input['package']; ?>_i18n {
  * @subpackage <?php echo $input['package']; ?>/includes
  * @author     <?php echo $input['author_name']; ?> <<?php echo $input['author_email']; ?>>
  */
+ 
+namespace <?php echo $input['plugin_namespace']; ?>\Activate;
+
 class <?php echo $input['package']; ?>_Activator {
 
 	/**
@@ -1005,6 +1019,9 @@ class <?php echo $input['package']; ?>_Activator {
  * @subpackage <?php echo $input['package']; ?>/includes
  * @author     <?php echo $input['author_name']; ?> <<?php echo $input['author_email']; ?>>
  */
+ 
+namespace <?php echo $input['plugin_namespace']; ?>\Deactivate;
+
 class <?php echo $input['package']; ?>_Deactivator {
 
 	/**
@@ -1110,6 +1127,9 @@ class <?php echo $input['package']; ?>_Deactivator {
  * @subpackage <?php echo $input['package']; ?>/includes
  * @author     <?php echo $input['author_name']; ?> <<?php echo $input['author_email']; ?>>
  */
+ 
+namespace <?php echo $input['plugin_namespace']; ?>\Load;
+
 class <?php echo $input['package']; ?>_Loader {
 
 	/**
@@ -1243,6 +1263,9 @@ class <?php echo $input['package']; ?>_Loader {
  * @subpackage <?php echo $input['package']; ?>/admin
  * @author     <?php echo $input['author_name']; ?> <<?php echo $input['author_email']; ?>>
  */
+ 
+namespace <?php echo $input['plugin_namespace']; ?>\Admin;
+
 class <?php echo $input['package']; ?>_Admin {
 
 	/**
@@ -1374,6 +1397,9 @@ class <?php echo $input['package']; ?>_Admin {
  * @subpackage <?php echo $input['package']; ?>/public
  * @author     <?php echo $input['author_name']; ?> <<?php echo $input['author_email']; ?>>
  */
+ 
+namespace <?php echo $input['plugin_namespace']; ?>\Public;
+
 class <?php echo $input['package']; ?>_Public {
 
 	/**

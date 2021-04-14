@@ -7,19 +7,23 @@
  }
  
  #boilerplate_form_download div {
-     display: flex; 
-     flex-direction: row; 
-     margin-bottom: 1rem; 
+     margin-bottom: 2rem; 
+     display: flex;
+     flex-direction: column; 
  }
  
  
  #boilerplate_form_download label {
-    flex-basis: 9rem;  
+     display: block;
  }
  
  #boilerplate_form_download input {
-     width: 30rem; 
+     display: block; 
  }
+ 
+ #boilerplate_form_download p {
+      font-size: 0.875rem; 
+  }
  
 #boilerplate_form_download button {
      margin-left: auto; 
