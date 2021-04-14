@@ -399,7 +399,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Currently plugin version.
+ * Current plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
@@ -857,18 +857,9 @@ class <?php echo $input['package']; ?>_i18n {
 /**
  * Fired during plugin activation
  *
- * @link       <?php echo $input['plugin_url'] . "\n"; ?>
- * @since      1.0.0
- *
- * @package    <?php echo $input['package'] . "\n"; ?>
- * @subpackage <?php echo $input['package']; ?>/includes
- */
-
-/**
- * Fired during plugin activation.
- *
  * This class defines all code necessary to run during the plugin's activation.
  *
+ * @link       <?php echo $input['plugin_url'] . "\n"; ?>
  * @since      1.0.0
  * @package    <?php echo $input['package'] . "\n"; ?>
  * @subpackage <?php echo $input['package']; ?>/includes
@@ -1004,18 +995,9 @@ class <?php echo $input['package']; ?>_Activator {
 /**
  * Fired during plugin deactivation
  *
- * @link       <?php echo $input['plugin_url'] . "\n"; ?>
- * @since      1.0.0
- *
- * @package    <?php echo $input['package'] . "\n"; ?>
- * @subpackage <?php echo $input['package']; ?>/includes
- */
-
-/**
- * Fired during plugin deactivation.
- *
  * This class defines all code necessary to run during the plugin's deactivation.
  *
+ * @link       <?php echo $input['plugin_url'] . "\n"; ?>
  * @since      1.0.0
  * @package    <?php echo $input['package'] . "\n"; ?>
  * @subpackage <?php echo $input['package']; ?>/includes
