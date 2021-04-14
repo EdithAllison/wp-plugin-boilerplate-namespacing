@@ -1248,18 +1248,11 @@ class <?php echo $input['package']; ?>_Loader {
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       <?php echo $input['plugin_url'] . "\n"; ?>
- * @since      1.0.0
- *
- * @package    <?php echo $input['package'] . "\n"; ?>
- * @subpackage <?php echo $input['package']; ?>/admin
- */
-
-/**
- * The admin-specific functionality of the plugin.
- *
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
+ *
+ * @link       <?php echo $input['plugin_url'] . "\n"; ?>
+ * @since      1.0.0
  *
  * @package    <?php echo $input['package'] . "\n"; ?>
  * @subpackage <?php echo $input['package']; ?>/admin
@@ -1382,18 +1375,11 @@ class <?php echo $input['package']; ?>_Admin {
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       <?php echo $input['plugin_url'] . "\n"; ?>
- * @since      1.0.0
- *
- * @package    <?php echo $input['package'] . "\n"; ?>
- * @subpackage <?php echo $input['package']; ?>/public 
- */
-
-/**
- * The public-facing functionality of the plugin.
- *
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
+ *
+ * @link       <?php echo $input['plugin_url'] . "\n"; ?>
+ * @since      1.0.0
  *
  * @package    <?php echo $input['package'] . "\n"; ?>
  * @subpackage <?php echo $input['package']; ?>/public
