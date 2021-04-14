@@ -383,7 +383,7 @@ class Wp_Plugin_Boilerplate_Namespacing_Public {
  * Author URI:        <?php echo $input['author_url'] . "\n"; ?>
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       <?php echo $input['plugin_slug'] . "\n"; ?>
+ * Text Domain:       <?php echo $input['lower'] . "\n"; ?>
  * Domain Path:       /languages
  */
 
@@ -403,18 +403,18 @@ define( '<?php echo $input['upper']; ?>_VERSION', '1.0.0' );
  * The code that runs during plugin activation.
  * This action is documented in includes/class-<?php echo $input['plugin_slug']; ?>-activator.php
  */
-function activate_<?php echo $input['lower']; ?>() {
+function activate_<?php echo $input['lower']; ?>( $network_wide ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-activator.php';
-	<?php echo $input['package']; ?>_Activator::activate();
+	<?php echo $input['package']; ?>_Activator::activate( $network_wide );
 }
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-<?php echo $input['lower']; ?>-deactivator.php
+ * This action is documented in includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php
  */
-function deactivate_<?php echo $input['lower']; ?>() {
+function deactivate_<?php echo $input['lower']; ?>( $network_wide ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php';
-	<?php echo $input['package']; ?>_Deactivator::deactivate();
+	<?php echo $input['package']; ?>_Deactivator::deactivate( $network_wide );
 }
 
 register_activation_hook( __FILE__, 'activate_<?php echo $input['lower']; ?>' );
@@ -439,9 +439,38 @@ function run_<?php echo $input['lower']; ?>() {
 
 	$plugin = new <?php echo $input['package']; ?>();
 	$plugin->run();
+	
+	// if we have a new blog on a multisite let's set it up
+	add_action( 'wp_insert_site', '<?php echo $input['lower']; ?>_run_multisite_new_site');        
+		 
+	//if a blog is removed, let's remove the settings 
+   add_action( 'wp_uninitialize_site', '<?php echo $input['lower']; ?>_run_multisite_delete');
 
 }
 run_<?php echo $input['lower']; ?>();
+
+/**
+ * Runs when a new blog is added to network. 
+ *
+ * @since    1.0.0
+ */
+function <?php echo $input['lower']; ?>_run_multisite_new_site($params) {
+  require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-activator.php';    
+  <?php echo $input['package']; ?>_Activator::add_blog($params); 
+}
+
+/**
+ * Runs when a blog is deleted from network. 
+ *
+ * @since    1.0.0
+ */ 
+function <?php echo $input['lower']; ?>_run_multisite_delete($params) {
+  require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php';
+  <?php echo $input['package']; ?>_Deactivator::remove_blog($params);        
+}
+
+
+
 
 				<?php $text = '<?php' . "\n" . ob_get_clean(); 
 				
@@ -479,6 +508,54 @@ run_<?php echo $input['lower']; ?>();
 // If uninstall not called from WordPress, then exit.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
+}
+
+global $wpdb; 
+
+/**
+ * Check for Multisite.
+ *
+ * If Multisite, delete for all blogs (deletion at network level)
+ * Otherwise, delete for current
+ *
+ * @since    1.0.0
+ */	 
+if ( is_multisite() ) {
+		
+	// Get all blogs in the network and delete tables on each one
+	$blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+	 
+	foreach ( $blog_ids as $blog_id ) {
+		 
+		switch_to_blog( $blog_id );
+			 
+		<?php echo $input['lower']; ?>_uninstall_plugin(); 
+			 
+		restore_current_blog();
+	}
+	 
+} else {
+	 
+  <?php echo $input['lower']; ?>_uninstall_plugin(); 
+	 
+}
+ 
+/**
+* This function is used on plugin deletion. 
+*
+* Amend to include your own tasks such as 
+* unschedule cron events with wp_unschedule_event()
+* remove options with delete_option() 
+* delete custom DB tables  
+*
+* For sample code see https://agentur-allison.at/how-to-write-a-multisite-compatible-wordpress-plugin/
+**/
+function <?php echo $input['lower']; ?>_uninstall_plugin() {
+ 
+  global $wpdb; 
+  
+  // Add your own code here 
+	 
 }
 
 				<?php $text = '<?php' . "\n" . ob_get_clean(); 				
@@ -710,7 +787,7 @@ class Plugin_Name {
 				break; 
 				
 				
-				case 'includes/class-plugin-name-i18n.php': // CLASS-PLUGIN-NAME-I18N.PHP
+				case 'includes/class-plugin-name-i18n.php': // INCLUDES/CLASS-PLUGIN-NAME-I18N.PHP
 								
 				ob_start();		?>
 
@@ -749,21 +826,19 @@ class <?php echo $input['package']; ?>_i18n {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'<?php echo $input['plugin_slug']; ?>',
+			'<?php echo $input['lower']; ?>',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);
 
 	}
 
-
-
 }
 
 				<?php $text = '<?php' . "\n" . ob_get_clean();
 				break; 
 				
-				case 'includes/class-plugin-name-activator.php': // CLASS-PLUGIN-NAME-ACTIVATOR.PHP
+				case 'includes/class-plugin-name-activator.php': // INCLUDES/CLASS-PLUGIN-NAME-ACTIVATOR.PHP
 				ob_start();		?>
 				
 /**
@@ -789,22 +864,125 @@ class <?php echo $input['package']; ?>_i18n {
 class <?php echo $input['package']; ?>_Activator {
 
 	/**
+	* Database Version 
+	*
+	* @since    1.0.0
+	* * @var      string    $<?php echo $input['package']; ?>_db_version    Plugin database version
+	*/
+	public static $<?php echo $input['package']; ?>_db_version = '1.0.0';
+
+	/**
 	 * Short Description. (use period)
 	 *
 	 * Long Description.
 	 *
 	 * @since    1.0.0
 	 */
-	public static function activate() {
+	public static function activate( $network_wide ) {
+	
+		// Get all blogs in the network and activate plugin on each one
+		$blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+				 
+		foreach ( $blog_ids as $blog_id ) {           
+			switch_to_blog( $blog_id ); 
+			  
+			self::create_table();       
+			self::set_options();            
+			self::schedule_cron();    
+		
+			restore_current_blog();
+		  }
+				 
+		} else {
+				 
+		  	self::create_table();     
+		    self::set_options();      
+		    self::schedule_cron(); 
+				 
+		} 
 
 	}
-
+	
+	/**
+	* This function demonstrates how database changes can be run on plugin activation. 
+	*
+	* Amend to include your own db changes eg creating tables 
+	* For sample code see https://agentur-allison.at/how-to-write-a-multisite-compatible-wordpress-plugin/
+	**/
+	private static function create_table() {
+		 
+		global $wpdb;   
+		$installed_ver = get_option( "$<?php echo $input['package']; ?>_db_version" );
+			 
+		if ( empty($installed_ver) || $installed_ver != self::$<?php echo $input['package']; ?>_db_version ) {
+		 
+		 	// Add here your own DB changes
+				 
+		  update_option( "$<?php echo $input['package']; ?>_db_version", self::$<?php echo $input['package']; ?>_db_version);
+			 
+		}	 
+  	}  
+  
+  	/**
+	* This function demonstrates how to set options. 
+	*
+	* Amend to include your own options
+	* For sample code see https://agentur-allison.at/how-to-write-a-multisite-compatible-wordpress-plugin/
+	*
+	* For usage of update_option() see https://developer.wordpress.org/reference/functions/update_option/
+	* 
+	**/
+	private static function set_options() {
+		   
+	  // Add your own options with update_option()
+		   
+	} 
+	
+	/**
+	* This function demonstrates how to set up a cron.
+	*
+	* Amend to include your own cron
+	* For sample code see https://agentur-allison.at/how-to-write-a-multisite-compatible-wordpress-plugin/
+	*
+	* For usage of wp_schedule_event() see https://developer.wordpress.org/reference/functions/wp_schedule_event/ 
+	**/
+	
+	private static function schedule_cron() { 
+	
+		// Add your own cron with wp_schedule_event() 
+		 
+  	}
+	  
+	/**
+	*
+	* Changes when new blog is added to network. 
+	*
+	* This function is used to run setup when plugin is activated network wide 
+	* and a new blog is set up within the network
+	*
+	* For sample code see https://agentur-allison.at/how-to-write-a-multisite-compatible-wordpress-plugin/
+	**/
+	public static function add_blog( $params ) {
+			 
+		if ( is_plugin_active_for_network( '<?php echo $input['plugin_slug']; ?>/<?php echo $input['plugin_slug']; ?>.php' ) ) {
+				 
+		  switch_to_blog( $params->blog_id );
+				 
+		  self::create_table();     
+		  self::set_options();      
+		  self::schedule_cron(); 
+				 
+		  restore_current_blog();
+				 
+		 }
+	}  	
+	
 }
 							
 				<?php $text = '<?php' . "\n" . ob_get_clean();
 				break;
 				
-				case 'includes/class-plugin-name-deactivator.php': // CLASS-PLUGIN-NAME-DEACTIVATOR.PHP
+				case 'includes/class-plugin-name-deactivator.php': // INCLUDES/CLASS-PLUGIN-NAME-DEACTIVATOR.PHP
 				ob_start();		?>
 
 /**
@@ -836,8 +1014,71 @@ class <?php echo $input['package']; ?>_Deactivator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function deactivate() {
-
+	public static function deactivate( $network_wide ) {
+	
+		global $wpdb; 
+				 
+		if ( is_multisite() &&  $network_wide ) {
+				 
+		  // Get all blogs in the network and deactivate cron on each 
+		  $blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+				 
+		  foreach ( $blog_ids as $blog_id ) {
+					 
+			switch_to_blog( $blog_id );
+					 
+			  // if the plugin was previously activated locally we honour the local decision and leave it in place  
+			  // this follows the same logic as deactivate_plugins() in /wp-admin/includes/plugin.php line 734 
+			  if ( !in_array( 'foo/foo.php', (array) get_option( 'active_plugins', array() ) )  ) {                 
+				self::unschedule_cron();                    
+			  }
+					 
+			restore_current_blog();
+		  }
+				 
+		} else {        
+		  self::unschedule_cron();         
+		} 
+		
+		/**
+		 * This function demonstrates how to unschedule cron on deactivation.
+		 *
+		 * Amend to include your own cron
+		 * For sample code see https://agentur-allison.at/how-to-write-a-multisite-compatible-wordpress-plugin/
+		 *
+		 * For usage of wp_unschedule_event() see https://developer.wordpress.org/reference/functions/wp_unschedule_event/ 
+		 *
+		 * @since    1.0.0
+		*/
+		public static function unschedule_cron() {       
+		
+			// Add your own code using wp_unschedule_event()              
+	    }    
+	 
+		 
+		/**
+		 * This function demonstrates how to delete content from DB when a blog is deleted.
+		 *
+		 * Amend to include your own db changes eg dropping tables 
+		 * For sample code see https://agentur-allison.at/how-to-write-a-multisite-compatible-wordpress-plugin/
+		 *
+		 * Options and Cron Events are automatically deleted on blog deletion
+		 * But custom tables need to be deleted by plugin 
+		 * Always tidy up after yourself!
+		 *
+		 * @since    1.0.0
+		*/
+	    public static function remove_blog( $params ) {
+				 
+			global $wpdb;
+			switch_to_blog( $params->blog_id );      
+		 	
+			// Add your own code to delete DB content such as custom tables      
+				 
+			restore_current_blog();
+			 
+		} // END REMOVE_BLOG()  
+	
 	}
 
 }
