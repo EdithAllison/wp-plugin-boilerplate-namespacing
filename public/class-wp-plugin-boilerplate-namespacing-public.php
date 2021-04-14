@@ -407,22 +407,15 @@ define( '<?php echo $input['upper']; ?>_VERSION', '1.0.0' );
  * The code that runs during plugin activation.
  * This action is documented in includes/class-<?php echo $input['plugin_slug']; ?>-activator.php
  */
-function activate_<?php echo $input['lower']; ?>( $network_wide ) {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-activator.php';
-	\<?php echo $input['plugin_namespace']; ?>\Activate\<?php echo $input['package']; ?>_Activator::activate( $network_wide );
-}
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-activator.php';
+register_activation_hook( __FILE__, array( __NAMESPACE__ . '\Activate\<?php echo $input['package']; ?>_Activator', 'activate') );
 
 /**
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php
  */
-function deactivate_<?php echo $input['lower']; ?>( $network_wide ) {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php';
-	\<?php echo $input['plugin_namespace']; ?>\Deactivate\<?php echo $input['package']; ?>_Deactivator::deactivate( $network_wide );
-}
-
-register_activation_hook( __FILE__,  __NAMESPACE__ . '\activate_<?php echo $input['lower']; ?>' );
-register_deactivation_hook( __FILE__,  __NAMESPACE__ . '\deactivate_<?php echo $input['lower']; ?>' );
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php';
+register_deactivation_hook( __FILE__, array( __NAMESPACE__ . '\Deactivate\<?php echo $input['package']; ?>_Deactivator', 'deactivate') );
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -439,39 +432,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_
  *
  * @since    1.0.0
  */
-function run_<?php echo $input['lower']; ?>() {
-
-	$plugin = new \<?php echo $input['plugin_namespace']; ?>\Inc\<?php echo $input['package']; ?>();
-	$plugin->run();
-	
-	// if we have a new blog on a multisite let's set it up
-	add_action( 'wp_insert_site',  __NAMESPACE__ .  '\<?php echo $input['lower']; ?>_run_multisite_new_site');        
-		 
-	//if a blog is removed, let's remove the settings 
-   add_action( 'wp_uninitialize_site',  __NAMESPACE__ .  '\<?php echo $input['lower']; ?>_run_multisite_delete');
-
-}
-run_<?php echo $input['lower']; ?>();
-
-/**
- * Runs when a new blog is added to network. 
- *
- * @since    1.0.0
- */
-function <?php echo $input['lower']; ?>_run_multisite_new_site($params) {
-  require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-activator.php';    
-  \<?php echo $input['plugin_namespace']; ?>\Activate\<?php echo $input['package']; ?>_Activator::add_blog($params); 
-}
-
-/**
- * Runs when a blog is deleted from network. 
- *
- * @since    1.0.0
- */ 
-function <?php echo $input['lower']; ?>_run_multisite_delete($params) {
-  require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php';
-  \<?php echo $input['plugin_namespace']; ?>\Deactivate\<?php echo $input['package']; ?>_Deactivator::remove_blog($params);        
-}
+call_user_func( array( new \<?php echo $input['plugin_namespace']; ?>\Inc\<?php echo $input['package']; ?>(), 'run' ) );
 
 				<?php $text = '<?php' . "\n" . ob_get_clean(); 
 				
@@ -584,7 +545,8 @@ function <?php echo $input['lower']; ?>_uninstall_plugin() {
  */
  
 namespace <?php echo $input['plugin_namespace']; ?>\Inc;
-use <?php echo $input['plugin_namespace']; ?>\Load;
+use <?php echo $input['plugin_namespace']; ?>\Activate;
+use <?php echo $input['plugin_namespace']; ?>\Deactivate;
 use <?php echo $input['plugin_namespace']; ?>\i18n;
 use <?php echo $input['plugin_namespace']; ?>\Admin;
 use <?php echo $input['plugin_namespace']; ?>\Public;
@@ -713,8 +675,6 @@ class Plugin_Name {
 		add_action( 'wp_enqueue_scripts', array($plugin_public, 'enqueue_styles') );
 		add_action( 'wp_enqueue_scripts', array($plugin_public, 'enqueue_scripts') );
 
-
-
 	}
 
 	/**
@@ -727,6 +687,15 @@ class Plugin_Name {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+		
+		// if we have a new blog on a multisite let's set it up
+		require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-activator.php';
+		add_action( 'wp_insert_site', array( __NAMESPACE__ .  \<?php echo $input['plugin_namespace']; ?>\Activate\<?php echo $input['package']; ?>_Activator, 'add_blog') );      
+			 
+		//if a blog is removed, let's remove the settings 
+		require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php';
+		add_action( 'wp_uninitialize_site', array( __NAMESPACE__ .  \<?php echo $input['plugin_namespace']; ?>\Deactivate\<?php echo $input['package']; ?>_Deactivator, 'remove_blog') ); 
+	   
 	}
 
 	/**
