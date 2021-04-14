@@ -295,7 +295,7 @@ class Wp_Plugin_Boilerplate_Namespacing_Public {
 		$input['lower'] = strtolower($string);
 		
 		// Insert text
-		$this->insert_text(  $dst . '/' . $input['plugin_slug'] . '.php', $this->get_content($input, 'plugin_name.php') , 'w+');
+		$this->insert_text(  $dst . '/' . $input['plugin_slug'] . '.php', $this->get_content($input, 'plugin-name.php') , 'w+');
 		$this->insert_text(  $dst . '/uninstall.php', $this->get_content($input, 'uninstall.php') , 'w+');
 		
 		$this->insert_text(  $dst . '/includes/class-' . $input['plugin_slug'] . '.php', $this->get_content($input, 'includes/class-plugin-name.php') , 'w+');
@@ -358,7 +358,7 @@ class Wp_Plugin_Boilerplate_Namespacing_Public {
 			
 			switch ($file) {
 				
-				case 'plugin_name.php':
+				case 'plugin-name.php':  // PLUGIN-NAME.PHP
 				
 				ob_start();		?>
 
@@ -447,7 +447,7 @@ run_<?php echo $input['lower']; ?>();
 				
 				break; 
 				
-				case 'uninstall.php':
+				case 'uninstall.php': // UNINSTALL.PHP
 				
 				ob_start();		?>
 
@@ -485,7 +485,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 				
 				break; 
 				
-				case 'includes/class-plugin-name.php':
+				case 'includes/class-plugin-name.php': // CLASS-PLUGIN-NAME.PHP
 				
 				ob_start();		?>
 
@@ -710,7 +710,7 @@ class Plugin_Name {
 				break; 
 				
 				
-				case 'includes/class-plugin-name-i18n.php':
+				case 'includes/class-plugin-name-i18n.php': // CLASS-PLUGIN-NAME-I18N.PHP
 								
 				ob_start();		?>
 
@@ -763,7 +763,7 @@ class <?php echo $input['package']; ?>_i18n {
 				<?php $text = '<?php' . "\n" . ob_get_clean();
 				break; 
 				
-				case 'includes/class-plugin-name-activator.php':
+				case 'includes/class-plugin-name-activator.php': // CLASS-PLUGIN-NAME-ACTIVATOR.PHP
 				ob_start();		?>
 				
 /**
@@ -804,7 +804,7 @@ class <?php echo $input['package']; ?>_Activator {
 				<?php $text = '<?php' . "\n" . ob_get_clean();
 				break;
 				
-				case 'includes/class-plugin-name-deactivator.php':
+				case 'includes/class-plugin-name-deactivator.php': // CLASS-PLUGIN-NAME-DEACTIVATOR.PHP
 				ob_start();		?>
 
 /**
@@ -845,7 +845,7 @@ class <?php echo $input['package']; ?>_Deactivator {
 				<?php $text = '<?php' . "\n" . ob_get_clean();
 				break;
 				
-				case 'includes/class-plugin-name-loader.php':
+				case 'includes/class-plugin-name-loader.php': // INCLUDES/CLASS-PLUGIN-NAME-LOADER.PHP
 				ob_start();		?>
 				
 /**
@@ -979,7 +979,7 @@ class <?php echo $input['package']; ?>_Loader {
 				<?php $text = '<?php' . "\n" . ob_get_clean();
 				break;
 				
-				case 'admin/class-plugin-name-admin.php':
+				case 'admin/class-plugin-name-admin.php': // ADMIN/CLASS-PLUGIN-NAME-ADMIN.PHP
 				ob_start();		?>	
 				
 /**
@@ -1088,7 +1088,7 @@ class <?php echo $input['package']; ?>_Admin {
 				break;	
 				
 				
-				case 'admin/partials/plugin-name-admin-display.php':
+				case 'admin/partials/plugin-name-admin-display.php': // ADMIN/PARTIALS/PLUGIN-NAME-ADMIN-DISPLAY.PHP
 				ob_start();		?>	
 
 /**
@@ -1110,7 +1110,7 @@ class <?php echo $input['package']; ?>_Admin {
 				break;	
 
 
-				case 'public/class-plugin-name-public.php':
+				case 'public/class-plugin-name-public.php': // PUBLIC/CLASS-PLUGIN-NAME-PUBLIC.PHP
 				ob_start();		?>	
 				
 /**
@@ -1221,7 +1221,7 @@ class <?php echo $input['package']; ?>_Public {
 				
 				
 				
-				case 'public/partials/plugin-name-public-display.php':
+				case 'public/partials/plugin-name-public-display.php': // CASE PUBLIC/PARTIALS/PLUGIN-NAME-PUBLIC-DISPLAY.PHP
 				ob_start();		?>		
 				
 /**
