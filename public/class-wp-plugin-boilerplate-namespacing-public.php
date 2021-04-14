@@ -434,6 +434,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_
  */
 call_user_func( array( new \<?php echo $input['plugin_namespace']; ?>\Inc\<?php echo $input['package']; ?>(), 'run' ) );
 
+
 				<?php $text = '<?php' . "\n" . ob_get_clean(); 
 				
 				break; 
