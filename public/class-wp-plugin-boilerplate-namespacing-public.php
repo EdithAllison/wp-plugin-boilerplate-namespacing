@@ -275,7 +275,6 @@ class Wp_Plugin_Boilerplate_Namespacing_Public {
 		rename( $dst . '/includes/class-plugin-name-activator.php', $dst . '/includes/class-' . $input['plugin_slug'] . '-activator.php' );
 		rename( $dst . '/includes/class-plugin-name-deactivator.php', $dst . '/includes/class-' . $input['plugin_slug'] . '-deactivator.php' );
 		rename( $dst . '/includes/class-plugin-name-i18n.php', $dst . '/includes/class-' . $input['plugin_slug'] . '-i18n.php' );
-		rename( $dst . '/includes/class-plugin-name-loader.php', $dst . '/includes/class-' . $input['plugin_slug'] . '-loader.php' );
 		rename( $dst . '/includes/class-plugin-name.php', $dst . '/includes/class-' . $input['plugin_slug'] . '.php' );
 				
 		rename( $dst . '/admin/class-plugin-name-admin.php', $dst . '/admin/class-' . $input['plugin_slug'] . '-admin.php' );
@@ -302,7 +301,6 @@ class Wp_Plugin_Boilerplate_Namespacing_Public {
 		$this->insert_text(  $dst . '/includes/class-' . $input['plugin_slug'] . '-i18n.php', $this->get_content($input, 'includes/class-plugin-name-i18n.php') , 'w+');
 		$this->insert_text(  $dst . '/includes/class-' . $input['plugin_slug'] . '-activator.php' , $this->get_content($input, 'includes/class-plugin-name-activator.php') , 'w+');
 		$this->insert_text(  $dst . '/includes/class-' . $input['plugin_slug'] . '-deactivator.php' , $this->get_content($input, 'includes/class-plugin-name-deactivator.php') , 'w+');
-		$this->insert_text(  $dst . '/includes/class-' . $input['plugin_slug'] . '-loader.php', $this->get_content($input, 'includes/class-plugin-name-loader.php') , 'w+');
 
 		$this->insert_text(  $dst . '/admin/class-' . $input['plugin_slug'] . '-admin.php' , $this->get_content($input, 'admin/class-plugin-name-admin.php') , 'w+');
 		$this->insert_text(  $dst . '/admin/partials/' . $input['plugin_slug'] . '-admin-display.php', $this->get_content($input, 'admin/partials/plugin-name-admin-display.php') , 'w+');
@@ -575,22 +573,10 @@ function <?php echo $input['lower']; ?>_uninstall_plugin() {
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       <?php echo $input['plugin_url'] . "\n"; ?>
- * @since      1.0.0
- *
- * @package    <?php echo $input['package'] . "\n"; ?>
- * @subpackage <?php echo $input['package']; ?>/includes
- */
-
-/**
- * The core plugin class.
- *
- * This is used to define internationalization, admin-specific hooks, and
- * public-facing site hooks.
- *
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
  *
+ * @link       <?php echo $input['plugin_url'] . "\n"; ?>
  * @since      1.0.0
  * @package    <?php echo $input['package'] . "\n"; ?>
  * @subpackage <?php echo $input['package']; ?>/includes
@@ -604,16 +590,6 @@ use <?php echo $input['plugin_namespace']; ?>\Admin;
 use <?php echo $input['plugin_namespace']; ?>\Public;
 
 class Plugin_Name {
-
-	/**
-	 * The loader that's responsible for maintaining and registering all hooks that power
-	 * the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      <?php echo $input['package']; ?>_Loader    $loader    Maintains and registers all hooks for the plugin.
-	 */
-	protected $loader;
 
 	/**
 	 * The unique identifier of this plugin.
@@ -651,9 +627,6 @@ class Plugin_Name {
 		$this-><?php echo $input['lower']; ?> = '<?php echo $input['plugin_slug']; ?>';
 
 		$this->load_dependencies();
-		$this->set_locale();
-		$this->define_admin_hooks();
-		$this->define_public_hooks();
 
 	}
 
@@ -676,12 +649,6 @@ class Plugin_Name {
 	private function load_dependencies() {
 
 		/**
-		 * The class responsible for orchestrating the actions and filters of the
-		 * core plugin.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-loader.php';
-
-		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
@@ -698,8 +665,6 @@ class Plugin_Name {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-<?php echo $input['plugin_slug']; ?>-public.php';
 
-		$this->loader = new \<?php echo $input['plugin_namespace']; ?>\Load\<?php echo $input['package']; ?>_Loader();
-
 	}
 
 	/**
@@ -714,8 +679,7 @@ class Plugin_Name {
 	private function set_locale() {
 
 		$plugin_i18n = new \<?php echo $input['plugin_namespace']; ?>\i18n\<?php echo $input['package']; ?>_i18n();
-
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
+		add_action( 'plugins_loaded', array($plugin_i18n, 'load_plugin_textdomain') );
 
 	}
 
@@ -730,8 +694,8 @@ class Plugin_Name {
 
 		$plugin_admin = new \<?php echo $input['plugin_namespace']; ?>\Admin\<?php echo $input['package']; ?>_Admin( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		add_action( 'admin_enqueue_scripts', array($plugin_admin, 'enqueue_styles') );
+		add_action( 'admin_enqueue_scripts', array($plugin_admin, 'enqueue_scripts') );
 
 	}
 
@@ -746,8 +710,10 @@ class Plugin_Name {
 
 		$plugin_public = new \<?php echo $input['plugin_namespace']; ?>\Public\<?php echo $input['package']; ?>_Public( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		add_action( 'wp_enqueue_scripts', array($plugin_public, 'enqueue_styles') );
+		add_action( 'wp_enqueue_scripts', array($plugin_public, 'enqueue_scripts') );
+
+
 
 	}
 
@@ -758,6 +724,9 @@ class Plugin_Name {
 	 */
 	public function run() {
 		$this->loader->run();
+		$this->set_locale();
+		$this->define_admin_hooks();
+		$this->define_public_hooks();
 	}
 
 	/**
@@ -769,16 +738,6 @@ class Plugin_Name {
 	 */
 	public function get_plugin_name() {
 		return $this->plugin_name;
-	}
-
-	/**
-	 * The reference to the class that orchestrates the hooks with the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    <?php echo $input['package']; ?>_Loader    Orchestrates the hooks of the plugin.
-	 */
-	public function get_loader() {
-		return $this->loader;
 	}
 
 	/**
@@ -1078,149 +1037,12 @@ class <?php echo $input['package']; ?>_Deactivator {
 				 
 			restore_current_blog();
 			 
-		} // END REMOVE_BLOG()  
+		} 
 	
 	}
 
 }
 				
-				<?php $text = '<?php' . "\n" . ob_get_clean();
-				break;
-				
-				case 'includes/class-plugin-name-loader.php': // INCLUDES/CLASS-PLUGIN-NAME-LOADER.PHP
-				ob_start();		?>
-				
-/**
- * Register all actions and filters for the plugin
- *
- * @link       <?php echo $input['plugin_url'] . "\n"; ?>
- * @since      1.0.0
- *
- * @package    <?php echo $input['package'] . "\n"; ?>
- * @subpackage <?php echo $input['package']; ?>/includes
- */
-
-/**
- * Register all actions and filters for the plugin.
- *
- * Maintain a list of all hooks that are registered throughout
- * the plugin, and register them with the WordPress API. Call the
- * run function to execute the list of actions and filters.
- *
- * @package    <?php echo $input['package'] . "\n"; ?>
- * @subpackage <?php echo $input['package']; ?>/includes
- * @author     <?php echo $input['author_name']; ?> <<?php echo $input['author_email']; ?>>
- */
- 
-namespace <?php echo $input['plugin_namespace']; ?>\Load;
-
-class <?php echo $input['package']; ?>_Loader {
-
-	/**
-	 * The array of actions registered with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      array    $actions    The actions registered with WordPress to fire when the plugin loads.
-	 */
-	protected $actions;
-
-	/**
-	 * The array of filters registered with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      array    $filters    The filters registered with WordPress to fire when the plugin loads.
-	 */
-	protected $filters;
-
-	/**
-	 * Initialize the collections used to maintain the actions and filters.
-	 *
-	 * @since    1.0.0
-	 */
-	public function __construct() {
-
-		$this->actions = array();
-		$this->filters = array();
-
-	}
-
-	/**
-	 * Add a new action to the collection to be registered with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @param    string               $hook             The name of the WordPress action that is being registered.
-	 * @param    object               $component        A reference to the instance of the object on which the action is defined.
-	 * @param    string               $callback         The name of the function definition on the $component.
-	 * @param    int                  $priority         Optional. The priority at which the function should be fired. Default is 10.
-	 * @param    int                  $accepted_args    Optional. The number of arguments that should be passed to the $callback. Default is 1.
-	 */
-	public function add_action( $hook, $component, $callback, $priority = 10, $accepted_args = 1 ) {
-		$this->actions = $this->add( $this->actions, $hook, $component, $callback, $priority, $accepted_args );
-	}
-
-	/**
-	 * Add a new filter to the collection to be registered with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @param    string               $hook             The name of the WordPress filter that is being registered.
-	 * @param    object               $component        A reference to the instance of the object on which the filter is defined.
-	 * @param    string               $callback         The name of the function definition on the $component.
-	 * @param    int                  $priority         Optional. The priority at which the function should be fired. Default is 10.
-	 * @param    int                  $accepted_args    Optional. The number of arguments that should be passed to the $callback. Default is 1.
-	 */
-	public function add_filter( $hook, $component, $callback, $priority = 10, $accepted_args = 1 ) {
-		$this->filters = $this->add( $this->filters, $hook, $component, $callback, $priority, $accepted_args );
-	}
-
-	/**
-	 * A utility function that is used to register the actions and hooks into a single
-	 * collection.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @param    array                $hooks            The collection of hooks that is being registered (that is, actions or filters).
-	 * @param    string               $hook             The name of the WordPress filter that is being registered.
-	 * @param    object               $component        A reference to the instance of the object on which the filter is defined.
-	 * @param    string               $callback         The name of the function definition on the $component.
-	 * @param    int                  $priority         The priority at which the function should be fired.
-	 * @param    int                  $accepted_args    The number of arguments that should be passed to the $callback.
-	 * @return   array                                  The collection of actions and filters registered with WordPress.
-	 */
-	private function add( $hooks, $hook, $component, $callback, $priority, $accepted_args ) {
-
-		$hooks[] = array(
-			'hook'          => $hook,
-			'component'     => $component,
-			'callback'      => $callback,
-			'priority'      => $priority,
-			'accepted_args' => $accepted_args,
-		);
-
-		return $hooks;
-
-	}
-
-	/**
-	 * Register the filters and actions with WordPress.
-	 *
-	 * @since    1.0.0
-	 */
-	public function run() {
-
-		foreach ( $this->filters as $filter ) {
-			add_filter( $filter['hook'], array( $filter['component'], $filter['callback'] ), $filter['priority'], $filter['accepted_args'] );
-		}
-
-		foreach ( $this->actions as $action ) {
-			add_action( $action['hook'], array( $action['component'], $action['callback'] ), $action['priority'], $action['accepted_args'] );
-		}
-
-	}
-
-}
-								
 				<?php $text = '<?php' . "\n" . ob_get_clean();
 				break;
 				
