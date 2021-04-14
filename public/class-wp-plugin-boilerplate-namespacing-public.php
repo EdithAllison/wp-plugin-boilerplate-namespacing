@@ -1321,7 +1321,7 @@ class <?php echo $input['package']; ?>_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/<?php echo $input['plugin_slug']; ?>-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/<?php echo $input['plugin_slug']; ?>-admin.css', array(), filemtime( plugin_dir_path( __FILE__ ) . 'css/<?php echo $input['plugin_slug']; ?>-admin.css'), 'all' );
 
 	}
 
@@ -1344,7 +1344,7 @@ class <?php echo $input['package']; ?>_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-admin.js', array( 'jquery' ), filemtime( $this->plugin_name, plugin_dir_path( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-admin.js' ), false );
 
 	}
 
@@ -1455,7 +1455,7 @@ class <?php echo $input['package']; ?>_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/<?php echo $input['plugin_slug']; ?>-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/<?php echo $input['plugin_slug']; ?>-public.css', array(), filemetime( plugin_dir_path( __FILE__ ) . 'css/<?php echo $input['plugin_slug']; ?>-public.css' ), 'all' );
 
 	}
 
@@ -1478,7 +1478,7 @@ class <?php echo $input['package']; ?>_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-public.js', array( 'jquery' ), filemtime( $this->plugin_name, plugin_dir_path( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-public.js' ), false );
 
 	}
 
