@@ -686,8 +686,14 @@ class Plugin_Name {
 	public function run() {
 		$this->loader->run();
 		$this->set_locale();
-		$this->define_admin_hooks();
-		$this->define_public_hooks();
+		
+		// Only fires admin hooks in admin; Public hooks in frontend. 
+		// Modify as your project needs it.
+		if ( is_admin() ) {
+		  $this->define_admin_hooks();
+		} else {
+		  $this->define_public_hooks();
+		}
 		
 		// if we have a new blog on a multisite let's set it up
 		require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-activator.php';
