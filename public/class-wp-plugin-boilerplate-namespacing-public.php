@@ -1074,7 +1074,7 @@ class <?php echo $input['package']; ?>_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles( $hook ) {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -1086,6 +1086,10 @@ class <?php echo $input['package']; ?>_Admin {
 		 * The <?php echo $input['package']; ?>_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
+		 *
+		 * You can use the $hook parameter to filter for a particular page,
+		 * for more information see the codex,
+		 * https://codex.wordpress.org/Plugin_API/Action_Reference/admin_enqueue_scripts
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/<?php echo $input['plugin_slug']; ?>-admin.css', array(), filemtime( plugin_dir_path( __FILE__ ) . 'css/<?php echo $input['plugin_slug']; ?>-admin.css'), 'all' );
@@ -1097,7 +1101,7 @@ class <?php echo $input['package']; ?>_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts( $hook ) {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -1109,6 +1113,10 @@ class <?php echo $input['package']; ?>_Admin {
 		 * The <?php echo $input['package']; ?>_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
+		 *
+		 * You can use the $hook parameter to filter for a particular page,
+		 * for more information see the codex,
+		 * https://codex.wordpress.org/Plugin_API/Action_Reference/admin_enqueue_scripts
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-admin.js', array( 'jquery' ), filemtime( $this->plugin_name, plugin_dir_path( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-admin.js' ), false );
