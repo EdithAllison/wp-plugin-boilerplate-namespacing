@@ -303,10 +303,10 @@ class Wp_Plugin_Boilerplate_Namespacing_Public {
 		rename( $dst . '/public/partials/plugin-name-public-display.php', $dst . '/public/partials/' . $input['plugin_slug'] . '-public-display.php' );
 		
 		// Create additional variables
-		$string = sanitize_title_with_dashes( $input['plugin_name'] );
+		$string = preg_replace('/\s+/', '_', $input['plugin_name']);
 		$input['package'] = ucwords( $string, '_');
 		$input['upper'] = strtoupper($string);
-		$input['lower'] = $string;
+		$input['lower'] = strtolower($string);
 		
 		// Insert text
 		$this->insert_text(  $dst . '/' . $input['plugin_slug'] . '.php', $this->get_content($input, 'plugin-name.php') , 'w+');
