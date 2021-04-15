@@ -861,13 +861,13 @@ class <?php echo $input['package']; ?>_Activator {
 	private static function create_table() {
 		 
 		global $wpdb;   
-		$installed_ver = get_option( "$<?php echo $input['lower']; ?>_db_version" , FALSE);
+		$installed_ver = get_option( "<?php echo $input['lower']; ?>_db_version";
 			 
 		if ( empty($installed_ver) || $installed_ver != self::$<?php echo $input['lower']; ?>_db_version ) {
 		 
 		 	// Add here your own DB changes
 				 
-		  update_option( "$<?php echo $input['lower']; ?>_db_version", self::$<?php echo $input['lower']; ?>_db_version);
+		  update_option( "<?php echo $input['lower']; ?>_db_version", self::$<?php echo $input['lower']; ?>_db_version);
 			 
 		}	 
   	}  
