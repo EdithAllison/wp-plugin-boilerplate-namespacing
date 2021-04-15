@@ -567,7 +567,7 @@ use <?php echo $input['plugin_namespace']; ?>\i18n;
 use <?php echo $input['plugin_namespace']; ?>\Admin;
 use <?php echo $input['plugin_namespace']; ?>\Front;
 
-class Plugin_Name {
+class <?php echo $input['package']; ?> {
 
 	/**
 	 * The unique identifier of this plugin.
@@ -758,18 +758,6 @@ class Plugin_Name {
  * so that it is ready for translation.
  *
  * @link       <?php echo $input['plugin_url'] . "\n"; ?>
- * @since      1.0.0
- *
- * @package    <?php echo $input['package'] . "\n"; ?>
- * @subpackage <?php echo $input['package']; ?>/includes
- */
-
-/**
- * Define the internationalization functionality.
- *
- * Loads and defines the internationalization files for this plugin
- * so that it is ready for translation.
- *
  * @since      1.0.0
  * @package    <?php echo $input['package'] . "\n"; ?>
  * @subpackage <?php echo $input['package']; ?>/includes
