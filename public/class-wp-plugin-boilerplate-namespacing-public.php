@@ -163,7 +163,7 @@ class Wp_Plugin_Boilerplate_Namespacing_Public {
 		$upload = wp_upload_dir();
 		
 		if (empty($dirPath) || !is_dir($dirPath) || strpos($dirPath, $upload['basedir'] . '/boilerplate/' ) !== 0   ) {
-			return false; // safety check to only run when we're in the right directory 
+			return false; // safety check to only run when we're in the right directory
 		}
 		
 		if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
@@ -177,9 +177,24 @@ class Wp_Plugin_Boilerplate_Namespacing_Public {
 				unlink($file);
 			}
 		}
-		rmdir($dirPath);
+		if ( self::is_dir_empty($dirPath) ) {
+			rmdir($dirPath);
+		}
 		return true; 
 	}
+	
+	public static function is_dir_empty($dir) {
+		$handle = opendir($dir);
+		while (false !== ($entry = readdir($handle))) {
+			if ($entry != "." && $entry != "..") {
+			  closedir($handle);
+			  return FALSE;
+			}
+		}
+		closedir($handle);
+		return TRUE;
+	}
+		
 	
 
 	/**
@@ -377,8 +392,8 @@ class Wp_Plugin_Boilerplate_Namespacing_Public {
  * Plugin URI:        <?php echo $input['plugin_url'] . "\n"; ?>
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
  * Version:           1.0.0
- * Author:            <?php echo $input['author_name'] . "\n"; ?>
- * Author URI:        <?php echo $input['author_url'] . "\n"; ?>
+ * Author:            <?php echo $input['plugin_author_name'] . "\n"; ?>
+ * Author URI:        <?php echo $input['plugin_author_url'] . "\n"; ?>
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       <?php echo $input['lower'] . "\n"; ?>
@@ -542,7 +557,7 @@ function <?php echo $input['lower']; ?>_uninstall_plugin() {
  * @since      1.0.0
  * @package    <?php echo $input['package'] . "\n"; ?>
  * @subpackage <?php echo $input['package']; ?>/includes
- * @author     <?php echo $input['author_name']; ?> <<?php echo $input['author_email']; ?>>
+ * @author     <?php echo $input['plugin_author_name']; ?> <<?php echo $input['plugin_author_email']; ?>>
  */
  
 namespace <?php echo $input['plugin_namespace']; ?>\Inc;
@@ -758,7 +773,7 @@ class Plugin_Name {
  * @since      1.0.0
  * @package    <?php echo $input['package'] . "\n"; ?>
  * @subpackage <?php echo $input['package']; ?>/includes
- * @author     <?php echo $input['author_name']; ?> <<?php echo $input['author_email']; ?>>
+ * @author     <?php echo $input['plugin_author_name']; ?> <<?php echo $input['plugin_author_email']; ?>>
  */
  
 namespace <?php echo $input['plugin_namespace']; ?>\i18n;
@@ -798,7 +813,7 @@ class <?php echo $input['package']; ?>_i18n {
  * @since      1.0.0
  * @package    <?php echo $input['package'] . "\n"; ?>
  * @subpackage <?php echo $input['package']; ?>/includes
- * @author     <?php echo $input['author_name']; ?> <<?php echo $input['author_email']; ?>>
+ * @author     <?php echo $input['plugin_author_name']; ?> <<?php echo $input['plugin_author_email']; ?>>
  */
  
 namespace <?php echo $input['plugin_namespace']; ?>\Activate;
@@ -936,7 +951,7 @@ class <?php echo $input['package']; ?>_Activator {
  * @since      1.0.0
  * @package    <?php echo $input['package'] . "\n"; ?>
  * @subpackage <?php echo $input['package']; ?>/includes
- * @author     <?php echo $input['author_name']; ?> <<?php echo $input['author_email']; ?>>
+ * @author     <?php echo $input['plugin_author_name']; ?> <<?php echo $input['plugin_author_email']; ?>>
  */
  
 namespace <?php echo $input['plugin_namespace']; ?>\Deactivate;
@@ -1036,7 +1051,7 @@ class <?php echo $input['package']; ?>_Deactivator {
  *
  * @package    <?php echo $input['package'] . "\n"; ?>
  * @subpackage <?php echo $input['package']; ?>/admin
- * @author     <?php echo $input['author_name']; ?> <<?php echo $input['author_email']; ?>>
+ * @author     <?php echo $input['plugin_author_name']; ?> <<?php echo $input['plugin_author_email']; ?>>
  */
  
 namespace <?php echo $input['plugin_namespace']; ?>\Admin;
@@ -1171,7 +1186,7 @@ class <?php echo $input['package']; ?>_Admin {
  *
  * @package    <?php echo $input['package'] . "\n"; ?>
  * @subpackage <?php echo $input['package']; ?>/public
- * @author     <?php echo $input['author_name']; ?> <<?php echo $input['author_email']; ?>>
+ * @author     <?php echo $input['plugin_author_name']; ?> <<?php echo $input['plugin_author_email']; ?>>
  */
  
 namespace <?php echo $input['plugin_namespace']; ?>\Public;
