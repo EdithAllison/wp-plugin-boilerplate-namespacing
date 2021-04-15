@@ -1236,7 +1236,7 @@ class <?php echo $input['package']; ?>_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/<?php echo $input['plugin_slug']; ?>-public.css', array(), filemetime( plugin_dir_path( __FILE__ ) . 'css/<?php echo $input['plugin_slug']; ?>-public.css' ), 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/<?php echo $input['plugin_slug']; ?>-public.css', array(), filemtime( plugin_dir_path( __FILE__ ) . 'css/<?php echo $input['plugin_slug']; ?>-public.css' ), 'all' );
 
 	}
 
