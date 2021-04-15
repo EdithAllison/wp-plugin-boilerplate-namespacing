@@ -12,15 +12,13 @@
  * @subpackage Wp_Plugin_Boilerplate_Namespacing/public/partials
  */
  
- echo print_r($_POST, true);
- 
  if ( isset($_POST['submit'] ) &&  ($_POST['submit'] === 'submit' )  ) {
      
     $input = array(
         'plugin_name' => !empty($_POST['plugin_name']) ? sanitize_text_field($_POST['plugin_name']) : 'Plugin Name',
         'plugin_slug' =>  !empty($_POST['plugin_slug']) ? sanitize_text_field($_POST['plugin_slug']) : 'plugin-name',
         'plugin_url' =>  !empty($_POST['plugin_url']) ? esc_url($_POST['plugin_url']) : 'http://example.com/plugin-name-uri/',
-        'plugin_namespace' =>  !empty($_POST['plugin_namespace']) ? sanitize_text_field($_POST['plugin_namespace']) : 'PluginNamespace',
+        'plugin_namespace' =>  !empty($_POST['plugin_namespace']) ? str_replace( '\\\\', '\\',  sanitize_text_field($_POST['plugin_namespace']) ) : 'PluginNamespace',
         'plugin_author_name' => !empty($_POST['plugin_author_name']) ? sanitize_text_field($_POST['plugin_author_name']) : 'Your Name',
         'plugin_author_email' => !empty($_POST['plugin_author_email']) ? sanitize_email($_POST['plugin_author_email']) : 'email@example.com',
         'plugin_author_url' => !empty($_POST['plugin_author_url']) ? esc_url($_POST['plugin_author_url']) : 'http://example.com/',
