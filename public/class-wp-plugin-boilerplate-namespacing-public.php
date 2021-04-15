@@ -837,6 +837,10 @@ class <?php echo $input['package']; ?>_Activator {
 	 */
 	public static function activate( $network_wide ) {
 	
+		global $wpdb; 
+			 
+		if ( is_multisite() &&  $network_wide ) {
+	
 		// Get all blogs in the network and activate plugin on each one
 		$blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
 				 
