@@ -994,47 +994,47 @@ class <?php echo $input['package']; ?>_Deactivator {
 		} else {        
 		  self::unschedule_cron();         
 		} 
-		
-		/**
-		 * This function demonstrates how to unschedule cron on deactivation.
-		 *
-		 * Amend to include your own cron
-		 * For sample code see https://agentur-allison.at/how-to-write-a-multisite-compatible-wordpress-plugin/
-		 *
-		 * For usage of wp_unschedule_event() see https://developer.wordpress.org/reference/functions/wp_unschedule_event/ 
-		 *
-		 * @since    1.0.0
-		*/
-		public static function unschedule_cron() {       
-		
-			// Add your own code using wp_unschedule_event()              
-	    }    
-	 
-		 
-		/**
-		 * This function demonstrates how to delete content from DB when a blog is deleted.
-		 *
-		 * Amend to include your own db changes eg dropping tables 
-		 * For sample code see https://agentur-allison.at/how-to-write-a-multisite-compatible-wordpress-plugin/
-		 *
-		 * Options and Cron Events are automatically deleted on blog deletion
-		 * But custom tables need to be deleted by plugin 
-		 * Always tidy up after yourself!
-		 *
-		 * @since    1.0.0
-		*/
-	    public static function remove_blog( $params ) {
-				 
-			global $wpdb;
-			switch_to_blog( $params->blog_id );      
-		 	
-			// Add your own code to delete DB content such as custom tables      
-				 
-			restore_current_blog();
-			 
-		} 
 	
 	}
+	
+	/**
+	 * This function demonstrates how to unschedule cron on deactivation.
+	 *
+	 * Amend to include your own cron
+	 * For sample code see https://agentur-allison.at/how-to-write-a-multisite-compatible-wordpress-plugin/
+	 *
+	 * For usage of wp_unschedule_event() see https://developer.wordpress.org/reference/functions/wp_unschedule_event/ 
+	 *
+	 * @since    1.0.0
+	*/
+	public static function unschedule_cron() {       
+	
+		// Add your own code using wp_unschedule_event()              
+	}    
+ 
+	 
+	/**
+	 * This function demonstrates how to delete content from DB when a blog is deleted.
+	 *
+	 * Amend to include your own db changes eg dropping tables 
+	 * For sample code see https://agentur-allison.at/how-to-write-a-multisite-compatible-wordpress-plugin/
+	 *
+	 * Options and Cron Events are automatically deleted on blog deletion
+	 * But custom tables need to be deleted by plugin 
+	 * Always tidy up after yourself!
+	 *
+	 * @since    1.0.0
+	*/
+	public static function remove_blog( $params ) {
+			 
+		global $wpdb;
+		switch_to_blog( $params->blog_id );      
+		 
+		// Add your own code to delete DB content such as custom tables      
+			 
+		restore_current_blog();
+		 
+	} 
 
 }
 				
