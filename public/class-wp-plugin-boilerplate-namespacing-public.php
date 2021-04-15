@@ -423,14 +423,14 @@ define( '<?php echo $input['upper']; ?>_VERSION', '1.0.0' );
  * This action is documented in includes/class-<?php echo $input['plugin_slug']; ?>-activator.php
  */
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-activator.php';
-register_activation_hook( __FILE__, array( __NAMESPACE__ . '\Activate\<?php echo $input['package']; ?>_Activator', 'activate') );
+register_activation_hook( __FILE__, array( __NAMESPACE__ . '\\Activate\<?php echo $input['package']; ?>_Activator', 'activate') );
 
 /**
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php
  */
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php';
-register_deactivation_hook( __FILE__, array( __NAMESPACE__ . '\Deactivate\<?php echo $input['package']; ?>_Deactivator', 'deactivate') );
+register_deactivation_hook( __FILE__, array( __NAMESPACE__ . '\\Deactivate\<?php echo $input['package']; ?>_Deactivator', 'deactivate') );
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -712,11 +712,11 @@ class <?php echo $input['package']; ?> {
 		
 		// if we have a new blog on a multisite let's set it up
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-activator.php';
-		add_action( 'wp_insert_site', array( __NAMESPACE__ .  \<?php echo $input['plugin_namespace']; ?>\Activate\<?php echo $input['package']; ?>_Activator, 'add_blog') );      
+		add_action( 'wp_insert_site', array( __NAMESPACE__ .  '\\<?php echo $input['plugin_namespace']; ?>\Activate\<?php echo $input['package']; ?>_Activator, 'add_blog') );      
 			 
 		//if a blog is removed, let's remove the settings 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php';
-		add_action( 'wp_uninitialize_site', array( __NAMESPACE__ .  \<?php echo $input['plugin_namespace']; ?>\Deactivate\<?php echo $input['package']; ?>_Deactivator, 'remove_blog') ); 
+		add_action( 'wp_uninitialize_site', array( __NAMESPACE__ .  '\\<?php echo $input['plugin_namespace']; ?>\Deactivate\<?php echo $input['package']; ?>_Deactivator, 'remove_blog') ); 
 	   
 	}
 
@@ -814,7 +814,7 @@ class <?php echo $input['package']; ?>_Activator {
 	* @since    1.0.0
 	* * @var      string    $<?php echo $input['package']; ?>_db_version    Plugin database version
 	*/
-	public static $<?php echo $input['package']; ?>_db_version = '1.0.0';
+	public static $<?php echo $input['lower']; ?>_db_version = '1.0.0';
 
 	/**
 	 * Short Description. (use period)
