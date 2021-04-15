@@ -565,7 +565,7 @@ use <?php echo $input['plugin_namespace']; ?>\Activate;
 use <?php echo $input['plugin_namespace']; ?>\Deactivate;
 use <?php echo $input['plugin_namespace']; ?>\i18n;
 use <?php echo $input['plugin_namespace']; ?>\Admin;
-use <?php echo $input['plugin_namespace']; ?>\Public;
+use <?php echo $input['plugin_namespace']; ?>\Front;
 
 class Plugin_Name {
 
@@ -686,7 +686,7 @@ class Plugin_Name {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new \<?php echo $input['plugin_namespace']; ?>\Public\<?php echo $input['package']; ?>_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new \<?php echo $input['plugin_namespace']; ?>\Front\<?php echo $input['package']; ?>_Public( $this->get_plugin_name(), $this->get_version() );
 
 		add_action( 'wp_enqueue_scripts', array($plugin_public, 'enqueue_styles') );
 		add_action( 'wp_enqueue_scripts', array($plugin_public, 'enqueue_scripts') );
@@ -1193,7 +1193,7 @@ class <?php echo $input['package']; ?>_Admin {
  * @author     <?php echo $input['plugin_author_name']; ?> <<?php echo $input['plugin_author_email']; ?>>
  */
  
-namespace <?php echo $input['plugin_namespace']; ?>\Public;
+namespace <?php echo $input['plugin_namespace']; ?>\Front;
 
 class <?php echo $input['package']; ?>_Public {
 
