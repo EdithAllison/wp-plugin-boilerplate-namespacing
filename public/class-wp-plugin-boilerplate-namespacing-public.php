@@ -812,7 +812,7 @@ class <?php echo $input['package']; ?>_Activator {
 	* Database Version 
 	*
 	* @since    1.0.0
-	* * @var      string    $<?php echo $input['package']; ?>_db_version    Plugin database version
+	* * @var      string    $<?php echo $input['lower']; ?>_db_version    Plugin database version
 	*/
 	public static $<?php echo $input['lower']; ?>_db_version = '1.0.0';
 
@@ -861,13 +861,13 @@ class <?php echo $input['package']; ?>_Activator {
 	private static function create_table() {
 		 
 		global $wpdb;   
-		$installed_ver = get_option( "$<?php echo $input['package']; ?>_db_version" );
+		$installed_ver = get_option( "$<?php echo $input['lower']; ?>_db_version" );
 			 
-		if ( empty($installed_ver) || $installed_ver != self::$<?php echo $input['package']; ?>_db_version ) {
+		if ( empty($installed_ver) || $installed_ver != self::$<?php echo $input['lower']; ?>_db_version ) {
 		 
 		 	// Add here your own DB changes
 				 
-		  update_option( "$<?php echo $input['package']; ?>_db_version", self::$<?php echo $input['package']; ?>_db_version);
+		  update_option( "$<?php echo $input['lower']; ?>_db_version", self::$<?php echo $input['lower']; ?>_db_version);
 			 
 		}	 
   	}  
