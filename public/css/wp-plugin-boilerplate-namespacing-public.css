@@ -2,3 +2,34 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+ 
+ #boilerplate_form_download {  
+ }
+ 
+ #boilerplate_form_download div {
+     margin-bottom: 2rem; 
+     display: flex;
+     flex-direction: column; 
+ }
+ 
+ 
+ #boilerplate_form_download label {
+     display: block;
+ }
+ 
+ #boilerplate_form_download input {
+     display: block; 
+ }
+ 
+ #boilerplate_form_download p {
+      font-size: 0.875rem; 
+  }
+ 
+#boilerplate_form_download button {
+     margin-left: auto; 
+ }
+  
+.entry-content .boilerplate_button_download, 
+.boilerplate_button_download {     
+    margin-bottom: 5rem; 
+ }
