@@ -711,11 +711,11 @@ class <?php echo $input['package']; ?> {
 		}
 		
 		// if we have a new blog on a multisite let's set it up
-		require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-activator.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-activator.php';
 		add_action( 'wp_insert_site', array( __NAMESPACE__ .  \<?php echo $input['plugin_namespace']; ?>\Activate\<?php echo $input['package']; ?>_Activator, 'add_blog') );      
 			 
 		//if a blog is removed, let's remove the settings 
-		require_once plugin_dir_path( __FILE__ ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-<?php echo $input['plugin_slug']; ?>-deactivator.php';
 		add_action( 'wp_uninitialize_site', array( __NAMESPACE__ .  \<?php echo $input['plugin_namespace']; ?>\Deactivate\<?php echo $input['package']; ?>_Deactivator, 'remove_blog') ); 
 	   
 	}
