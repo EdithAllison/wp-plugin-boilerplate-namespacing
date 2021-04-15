@@ -699,7 +699,7 @@ class <?php echo $input['package']; ?> {
 	 * @since    1.0.0
 	 */
 	public function run() {
-		$this->loader->run();
+
 		$this->set_locale();
 		
 		// Only fires admin hooks in admin; Public hooks in frontend. 
