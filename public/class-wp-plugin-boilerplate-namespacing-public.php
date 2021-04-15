@@ -1132,7 +1132,7 @@ class <?php echo $input['package']; ?>_Admin {
 		 * https://codex.wordpress.org/Plugin_API/Action_Reference/admin_enqueue_scripts
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-admin.js', array( 'jquery' ), filemtime( $this->plugin_name, plugin_dir_path( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-admin.js' ), false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-admin.js', array( 'jquery' ), filemtime( plugin_dir_path( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-admin.js' ), false );
 
 	}
 
@@ -1259,7 +1259,7 @@ class <?php echo $input['package']; ?>_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-public.js', array( 'jquery' ), filemtime( $this->plugin_name, plugin_dir_path( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-public.js' ), false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-public.js', array( 'jquery' ), filemtime( plugin_dir_path( __FILE__ ) . 'js/<?php echo $input['plugin_slug']; ?>-public.js' ), false );
 
 	}
 
