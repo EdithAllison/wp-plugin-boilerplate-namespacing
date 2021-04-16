@@ -43,7 +43,7 @@ define( 'WP_PLUGIN_BOILERPLATE_NAMESPACING_VERSION', '1.0.10' );
  */
 function activate_wp_plugin_boilerplate_namespacing( $network_wide ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-plugin-boilerplate-namespacing-activator.php';
-	Wp_Plugin_Boilerplate_Namespacing_Activator::activate();
+	Wp_Plugin_Boilerplate_Namespacing_Activator::activate( $network_wide );
 }
 
 /**
@@ -52,7 +52,7 @@ function activate_wp_plugin_boilerplate_namespacing( $network_wide ) {
  */
 function deactivate_wp_plugin_boilerplate_namespacing( $network_wide ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-plugin-boilerplate-namespacing-deactivator.php';
-	Wp_Plugin_Boilerplate_Namespacing_Deactivator::deactivate();
+	Wp_Plugin_Boilerplate_Namespacing_Deactivator::deactivate( $network_wide );
 }
 
 register_activation_hook( __FILE__, 'activate_wp_plugin_boilerplate_namespacing' );
