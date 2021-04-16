@@ -123,9 +123,9 @@ class Wp_Plugin_Boilerplate_Namespacing_Public {
 	public function recurseCopy($src,$dst, $childFolder='') { 
 	
 		$dir = opendir($src); 
-		mkdir($dst);
+		mkdir($dst, 0755);
 		if ($childFolder!='') {
-			mkdir($dst.'/'.$childFolder);
+			mkdir($dst.'/'.$childFolder, 0755);
 	
 			while(false !== ( $file = readdir($dir)) ) { 
 				if (( $file != '.' ) && ( $file != '..' )) { 
@@ -266,7 +266,7 @@ class Wp_Plugin_Boilerplate_Namespacing_Public {
 		$upload = wp_upload_dir();
 		$identifier =  time() . '_' .rand(9,9999); // identifier for this download 
 		$zipdst = $upload['basedir'] . '/boilerplate/zip/' . $identifier; // folder for zip file 
-		mkdir($zipdst);
+		mkdir($zipdst, 0755);
 		$dst = $upload['basedir'] . '/boilerplate/' . $identifier; // temp folder. deleted after zip 
 		$src = plugin_dir_path( dirname( __FILE__ ) ) . 'source/plugin-name';
 		$html = '';
