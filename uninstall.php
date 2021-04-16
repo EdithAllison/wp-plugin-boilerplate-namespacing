@@ -29,3 +29,86 @@
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
+
+global $wpdb; 
+
+/**
+ * Check for Multisite.
+ *
+ * If Multisite, delete for all blogs (deletion at network level)
+ * Otherwise, delete for current
+ */	 
+if ( is_multisite() ) {
+        
+    // Get all blogs in the network and delete tables on each one
+    $blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+     
+    foreach ( $blog_ids as $blog_id ) {
+         
+        switch_to_blog( $blog_id );
+             
+        wp_plugin_boilerplate_namespacing_uninstall_plugin(); 
+             
+        restore_current_blog();
+    }
+     
+} else {
+     
+  wp_plugin_boilerplate_namespacing_uninstall_plugin(); 
+     
+}
+ 
+/**
+* This function is used on plugin deletion. 
+*
+* Deletes custom upload folders 
+*
+**/
+function wp_plugin_boilerplate_namespacing_uninstall_plugin() {
+ 
+  global $wpdb; 
+  
+  $upload = wp_upload_dir();
+  $dir_boilerplate = $upload['basedir'] . '/boilerplate/'; 
+  
+  wp_plugin_boilerplate_namespacing_recurseDelete( $dir_boilerplate ); 
+     
+}
+
+
+function  wp_plugin_boilerplate_namespacing_recurseDelete($dirPath = '') {
+    
+    $upload = wp_upload_dir();
+    
+    if (empty($dirPath) || !is_dir($dirPath) || strpos($dirPath, $upload['basedir'] . '/boilerplate/' ) !== 0   ) {
+        return false; // safety check to only run when we're in the right directory
+    }
+    
+    if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+        $dirPath .= '/';
+    }
+    $files = glob($dirPath . '*', GLOB_MARK);
+    foreach ($files as $file) {
+        if (is_dir($file)) {
+            self::recurseDelete($file);
+        } else {
+            unlink($file);
+        }
+    }
+    if ( self::is_dir_empty($dirPath) ) {
+        rmdir($dirPath);
+    }
+    return true; 
+}
+
+function  wp_plugin_boilerplate_namespacing_is_dir_empty($dir) {
+    $handle = opendir($dir);
+    while (false !== ($entry = readdir($handle))) {
+        if ($entry != "." && $entry != "..") {
+          closedir($handle);
+          return FALSE;
+        }
+    }
+    closedir($handle);
+    return TRUE;
+}
