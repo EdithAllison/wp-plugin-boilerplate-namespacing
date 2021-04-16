@@ -16,7 +16,7 @@
  * Plugin Name:       WP Plugin Boilerplate with Namespacing
  * Plugin URI:        https://agentur-allison.at/wppbn/
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.0.0
+ * Version:           1.0.10
  * Author:            Edith Allison
  * Author URI:        https://agentur-allison.at
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WP_PLUGIN_BOILERPLATE_NAMESPACING_VERSION', '1.0.9' );
+define( 'WP_PLUGIN_BOILERPLATE_NAMESPACING_VERSION', '1.0.10' );
 
 /**
  * The code that runs during plugin activation.
@@ -77,6 +77,24 @@ function run_wp_plugin_boilerplate_namespacing() {
 
 	$plugin = new Wp_Plugin_Boilerplate_Namespacing();
 	$plugin->run();
+    
+    // if we have a new blog on a multisite let's create tables 
+    add_action( 'wp_insert_site', '\wp_plugin_boilerplate_namespacing_run_multisite_new_site');		
+    
+    //if a blog is removed, let's delete the tables
+    add_action( 'wp_uninitialize_site', '\wp_plugin_boilerplate_namespacing_run_multisite_delete');
 
 }
 run_wp_plugin_boilerplate_namespacing();
+
+function wp_plugin_boilerplate_namespacing_run_multisite_new_site($params) {
+    require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-plugin-boilerplate-namespacing-activator.php';	
+    Wp_Plugin_Boilerplate_Namespacing_Activator:add_blog($params);
+}
+
+
+function wp_plugin_boilerplate_namespacing_run_multisite_delete($params) {
+    require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-plugin-boilerplate-namespacing-deactivator.php';
+    Wp_Plugin_Boilerplate_Namespacing_Deactivator::remove_blog($params);		
+}
+

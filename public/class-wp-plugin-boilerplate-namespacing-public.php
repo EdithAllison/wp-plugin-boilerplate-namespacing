@@ -574,7 +574,7 @@ class <?php echo $input['package']; ?> {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $<?php echo $input['lower']; ?>    The string used to uniquely identify this plugin.
+	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
 	 */
 	protected $plugin_name;
 
@@ -602,7 +602,7 @@ class <?php echo $input['package']; ?> {
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this-><?php echo $input['lower']; ?> = '<?php echo $input['plugin_slug']; ?>';
+		$this->plugin_name = '<?php echo $input['plugin_slug']; ?>';
 
 		$this->load_dependencies();
 
@@ -844,7 +844,7 @@ class <?php echo $input['package']; ?>_Activator {
 				 
 		} else {
 				 
-		  	self::create_table();     
+			self::create_table();     
 		    self::set_options();      
 		    self::schedule_cron(); 
 				 
