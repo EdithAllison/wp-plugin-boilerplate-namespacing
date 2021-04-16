@@ -56,7 +56,7 @@ class Wp_Plugin_Boilerplate_Namespacing_Activator {
     /**
     * This function creates the necessary folders in /uploads/ 
     **/
-    private static function create_folders( $folders ) {
+    private static function create_folders() {
         
         $upload = wp_upload_dir();
         $dir_boilerplate = $upload['basedir'] . '/boilerplate'; 
