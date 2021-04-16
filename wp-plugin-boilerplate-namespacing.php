@@ -41,7 +41,7 @@ define( 'WP_PLUGIN_BOILERPLATE_NAMESPACING_VERSION', '1.0.10' );
  * The code that runs during plugin activation.
  * This action is documented in includes/class-wp-plugin-boilerplate-namespacing-activator.php
  */
-function activate_wp_plugin_boilerplate_namespacing() {
+function activate_wp_plugin_boilerplate_namespacing( $network_wide ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-plugin-boilerplate-namespacing-activator.php';
 	Wp_Plugin_Boilerplate_Namespacing_Activator::activate();
 }
@@ -50,7 +50,7 @@ function activate_wp_plugin_boilerplate_namespacing() {
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-wp-plugin-boilerplate-namespacing-deactivator.php
  */
-function deactivate_wp_plugin_boilerplate_namespacing() {
+function deactivate_wp_plugin_boilerplate_namespacing( $network_wide ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-plugin-boilerplate-namespacing-deactivator.php';
 	Wp_Plugin_Boilerplate_Namespacing_Deactivator::deactivate();
 }
